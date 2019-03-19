@@ -1,0 +1,7 @@
+regex
+aiohttp
+ethereum
+names
+py_ecc
+mnemonic
+coincurve
