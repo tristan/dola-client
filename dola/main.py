@@ -4,7 +4,8 @@ from dola.client import DolaClient
 from dola.wallet import Wallet
 from dola.utils import validate_address
 
-BASE_URL = 'https://dola.one'
+# BASE_URL = 'https://dola.one'
+BASE_URL = 'https://dola.testwerk.org'
 
 def help():
     print("")
@@ -22,6 +23,24 @@ async def main():
         client = DolaClient(BASE_URL, wallet)
         resp = await client.create_user(name)
         print(resp)
+        await client.close()
+    if sys.argv[1] == 'import':
+        print("Enter 12 word phrase: ", end='')
+        phrase = input()
+        wallet = Wallet(twelve_words=phrase)
+        wallet.save()
+        client = DolaClient(BASE_URL, wallet)
+        user = await client.get_user(wallet.address)
+        if user is None:
+            print("Creating user")
+            print("Enter name: ", end='')
+            name = input()
+            if name == '':
+                name = names.get_full_name()
+            resp = await client.create_user(name)
+            print(resp)
+        else:
+            print(user)
         await client.close()
     elif sys.argv[1] == 'balance':
         wallet = Wallet.load()

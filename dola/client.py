@@ -76,6 +76,14 @@ class DolaClient:
         if self._instance_cache is not None:
             del self._instance_cache[self._loop]
 
+    async def get_user(self, address):
+        try:
+            resp = await self.fetch('/v1/user/{}'.format(address),
+                                    method="GET", headers={'Authorization': self.wallet.auth})
+            return await resp.json()
+        except HTTPError:
+            return None
+
     async def create_user(self, name):
         resp = await self.fetch('/v1/user', method="POST", headers={'Authorization': self.wallet.auth},
                                 body={'name': name})
